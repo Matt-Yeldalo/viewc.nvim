@@ -1,0 +1,3 @@
+lua require('viewc').setup()
+
+
