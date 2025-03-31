@@ -1,9 +1,9 @@
 local M = {}
 
--- Add your default configuration here
-M.defaults = {}
+M.defaults = {
+	buffer_scope = false,
+}
 
--- TODO: Explain your options
 --- <code>
 --- </code
 --- @param opts table: Configuration opts.

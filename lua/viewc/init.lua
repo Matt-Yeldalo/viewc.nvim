@@ -18,7 +18,20 @@ M.viewc = function(opts)
 		return
 	end
 
+	local expected_file = utils.fetch_matching_view(current_file, current_file_type)
 
+	if not expected_file then
+		vim.notify("Something went wrong, unable to find matching file", vim.log.levels.ERROR)
+	end
+
+	print(full_path)
+	local base_path = utils.traverse_until(full_path, "/", { reverse = true })
+	print(base_path)
+	if opts.buffer_scope then
+		utils.switch_to_buffer(expected_file)
+	else
+		-- vim.cmd("edit " .. expected_file)
+	end
 end
 
 function M.setup(opts)
