@@ -11,16 +11,45 @@ function M.switch_to_buffer(filename)
 end
 
 -- @param opts table: Parameter description.
-function opts_with_default(opts, key, defaults)
+local function opts_with_default(opts, key, defaults)
 	return opts[key] or defaults[key]
 end
 
 -- TODO:
-local function reverse_traverse() end
+local function reverse_traverse(str, terminator, opts)
+	local result = ""
+	local found = false
+	if opts.chop then
+		for i = #str, 1, -1 do
+			local char = str:sub(i, i)
+			if not found and char ~= terminator then
+				goto continue
+			end
+
+			found = true
+
+			result = char .. result
+		    ::continue::
+		end
+	else
+		for i = #str, 1, -1 do
+			local char = str:sub(i, i)
+			if char == terminator then
+				break
+			end
+
+			result = char .. result
+		end
+	end
+
+	return result
+end
 
 -- @param str string The string to traverse
 -- @param terminator string The pattern to terminate
 -- @param opts table
+-- @opts = { reverse = false, chop = false }
+-- @return string
 local function traverse_until(str, terminator, opts)
 	if str == nil then
 		return
@@ -33,14 +62,7 @@ local function traverse_until(str, terminator, opts)
 	local reverse = opts_with_default(opts, "reverse", default_opts)
 
 	if reverse then
-		for i = #str, 1, -1 do
-			local char = str:sub(i, i)
-			if char == terminator then
-				break
-			end
-
-			result = char .. result
-		end
+		result = reverse_traverse(str, terminator, opts)
 	else
 		for i = 1, #str do
 			local char = str:sub(i, i)

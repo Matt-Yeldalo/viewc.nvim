@@ -5,6 +5,7 @@ local utils = require("viewc.utils")
 -- Add functionality
 M.viewc = function(opts)
 	local full_path = vim.api.nvim_buf_get_name(0)
+	local base_path = utils.traverse_until(full_path, "/", { reverse = true, chop = true })
 	local current_file = vim.fn.expand("%:t")
 	local current_file_type = vim.bo.filetype
 
@@ -24,13 +25,11 @@ M.viewc = function(opts)
 		vim.notify("Something went wrong, unable to find matching file", vim.log.levels.ERROR)
 	end
 
-	print(full_path)
-	local base_path = utils.traverse_until(full_path, "/", { reverse = true })
-	print(base_path)
+	local final_file = base_path .. "/" .. expected_file
 	if opts.buffer_scope then
 		utils.switch_to_buffer(expected_file)
 	else
-		-- vim.cmd("edit " .. expected_file)
+		vim.cmd("edit " .. final_file)
 	end
 end
 
