@@ -1,8 +1,8 @@
 local M = {}
 local config = require("viewc.config")
 local utils = require("viewc.utils")
+-- NOTE: for future advanced features it will be benefical to check/force user to be in rails project
 
--- Add functionality
 M.viewc = function(opts)
 	local full_path = vim.api.nvim_buf_get_name(0)
 	local base_path = utils.traverse_until(full_path, "/", { reverse = true, chop = true })
@@ -23,6 +23,7 @@ M.viewc = function(opts)
 
 	if not expected_file then
 		vim.notify("Something went wrong, unable to find matching file", vim.log.levels.ERROR)
+		return
 	end
 
 	local final_file = base_path .. "/" .. expected_file
